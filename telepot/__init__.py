@@ -189,10 +189,39 @@ def fleece(event):
     return flavor(event), peel(event)
 
 
+def shiny(msg):
+    """
+    Returns the HTML formatted text out of a HTML formatted message received
+    from updates as a plain text message and its HTML entitites.
+    """
+    text = msg.get('text', '')
+    entities = msg.get('entities', [])
+    shinies = {
+        'bold': ('<b>', '</b>'),
+        'italic': ('<i>', '</i>')
+    }
+    add_off = 0
+
+    if text:
+        for e in entities:
+            if e['type'] in shinies:
+                text = (text[:add_off + e['offset']] +
+                        shinies[e['type']][0] +
+                        text[add_off+e['offset']:])
+                add_off += len(shinies[e['type']][0])
+                text = (text[:add_off+e['offset']+e['length']] +
+                        shinies[e['type']][1] +
+                        text[add_off+e['offset']+e['length']:])
+                add_off += len(shinies[e['type']][1])
+
+    return text
+
+
 def is_event(msg):
     """
     Return whether the message looks like an event. That is, whether it has a flavor
     that starts with an underscore.
+    ``msg`` is expected to be a ``Message``
     """
     return flavor(msg).startswith('_')
 
