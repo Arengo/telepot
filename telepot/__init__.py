@@ -193,6 +193,7 @@ def shiny(msg):
     """
     Returns the HTML formatted text out of a HTML formatted message received
     from updates as a plain text message and its HTML entitites.
+    ``msg`` is expected to be a ``Message``
     """
     text = msg.get('text', '')
     entities = msg.get('entities', [])
@@ -221,7 +222,6 @@ def is_event(msg):
     """
     Return whether the message looks like an event. That is, whether it has a flavor
     that starts with an underscore.
-    ``msg`` is expected to be a ``Message``
     """
     return flavor(msg).startswith('_')
 
