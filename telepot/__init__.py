@@ -192,7 +192,7 @@ def fleece(event):
 def shiny(msg, parse_mode=None):
     """
     Returns the Markdown or HTML formatted text out of a formatted message
-    received from updates as a plain text message and its HTML entitites.
+    received from updates as a plain text message and its entitites.
     ``msg`` is expected to be a ``Message``.
     ``parse_mode`` is expected to be a String of 'HTML' or 'Markdown'.
     """
