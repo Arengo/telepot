@@ -189,31 +189,46 @@ def fleece(event):
     return flavor(event), peel(event)
 
 
-def shiny(msg):
+def shiny(msg, parse_mode=None):
     """
     Returns the HTML formatted text out of a HTML formatted message received
     from updates as a plain text message and its HTML entitites.
-    ``msg`` is expected to be a ``Message``
+    ``msg`` is expected to be a ``Message``.
+    ``parse_mode`` is expected to be a String of 'HTML' or 'Markdown'.
     """
     text = msg.get('text', '')
     entities = msg.get('entities', [])
-    shinies = {
-        'bold': ('<b>', '</b>'),
-        'italic': ('<i>', '</i>')
+    shinies_md = {
+        'bold': ('*', '*'),
+        'italic': ('_', '_'),
+        'code': ('`', '``'),
+        'pre': ('\n```text\n', '\n```\n')
     }
-    add_off = 0
+    shinies_html = {
+        'bold': ('<b>', '</b>'),
+        'italic': ('<i>', '</i>'),
+        'code': ('<code>', '</code>'),
+        'pre': ('<pre>', '</pre>')
+    }
+    shinies = {}
+    if parse_mode == 'Markdown':
+        shinies = shinies_md
+    elif parse_mode == 'HTML':
+        shinies = shinies_html
+    else:
+        return text
 
-    if text:
-        for e in entities:
-            if e['type'] in shinies:
-                text = (text[:add_off + e['offset']] +
-                        shinies[e['type']][0] +
-                        text[add_off+e['offset']:])
-                add_off += len(shinies[e['type']][0])
-                text = (text[:add_off+e['offset']+e['length']] +
-                        shinies[e['type']][1] +
-                        text[add_off+e['offset']+e['length']:])
-                add_off += len(shinies[e['type']][1])
+    add_off = 0
+    for e in entities:
+        if e['type'] in shinies:
+            text = (text[:add_off + e['offset']] +
+                    shinies[e['type']][0] +
+                    text[add_off+e['offset']:])
+            add_off += len(shinies[e['type']][0])
+            text = (text[:add_off+e['offset']+e['length']] +
+                    shinies[e['type']][1] +
+                    text[add_off+e['offset']+e['length']:])
+            add_off += len(shinies[e['type']][1])
 
     return text
 
