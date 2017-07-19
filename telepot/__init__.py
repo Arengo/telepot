@@ -191,8 +191,8 @@ def fleece(event):
 
 def shiny(msg, parse_mode=None):
     """
-    Returns the HTML formatted text out of a HTML formatted message received
-    from updates as a plain text message and its HTML entitites.
+    Returns the Markdown or HTML formatted text out of a formatted message
+    received from updates as a plain text message and its HTML entitites.
     ``msg`` is expected to be a ``Message``.
     ``parse_mode`` is expected to be a String of 'HTML' or 'Markdown'.
     """
@@ -202,7 +202,7 @@ def shiny(msg, parse_mode=None):
         'bold': ('*', '*'),
         'italic': ('_', '_'),
         'code': ('`', '``'),
-        'pre': ('\n```text\n', '\n```\n')
+        'pre': ('```text\n', '```')
     }
     shinies_html = {
         'bold': ('<b>', '</b>'),
